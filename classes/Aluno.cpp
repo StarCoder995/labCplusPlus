@@ -14,6 +14,7 @@ Aluno::Aluno(std::string l[], std::string n) : numeroDeMatricula(n) {
 }
 
 void Aluno::mostrarListaDeDisciplinas(){
+    std::cout<<"\n";
     for(int i = 0; i < 5; i++){
         std::cout<<this->listaDeDisciplinas[i]<<"\n";
 }

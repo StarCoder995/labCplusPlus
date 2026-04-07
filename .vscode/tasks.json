@@ -8,10 +8,10 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
-                "${workspaceFolder}\\classes\\Aluno.cpp",
+                "..${/}classes${/}Aluno.cpp",
                 "-o",
-                "${workspaceFolder}\\executaveis\\${fileBasenameNoExtension}"
-            ],
+                "${workspaceFolder}${/}executaveis${/}${fileBasenameNoExtension}"
+            ], 
             "options": {
                 "cwd": "${fileDirname}"
             },

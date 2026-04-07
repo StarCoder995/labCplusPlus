@@ -1,4 +1,4 @@
-#include "..\\classes\Aluno.h"
+#include "..\\classes\\Aluno.h"
 #include<iostream>
 
 int main(){
@@ -13,4 +13,5 @@ int main(){
     Aluno aluno(lista,"202504940042");
 
     aluno.mostrarNumeroDeMatricula();
+    aluno.mostrarListaDeDisciplinas();
 }
