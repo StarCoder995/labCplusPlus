@@ -1,4 +1,4 @@
-#include "..\\classes\\Aluno.h"
+#include "../classes/Aluno.h"
 #include<iostream>
 
 int main(){

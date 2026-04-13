@@ -1,21 +1,18 @@
 #include "MestreDosVetores.h"
 #include<iostream>
-#include<time.h>
 #include<thread>
 #include<chrono>
-
-namespace chrono = std::chrono;
-
-void mostrarVetor(auto vetor[], int tamanhoDoVetor){
+void mostrarVetor(int vetor[], int tamanhoDoVetor){
     std::cout<<"Vetor:\n";
-    for(auto& const i : vetor[]){
-        std :: cout << "i"<<" ";
+    for(int i = 0; i < tamanhoDoVetor; i++){
+        std::cout<<vetor[i]<<" ";
     }
     std::cout<<"\n";
 }
 
-void selectionSort(auto vetor[], int tamanhoDoVetor){
+void selectionSort(int vetor[], int tamanhoDoVetor){
     int helper;
+    std::chrono::time_point<std::chrono::steady_clock> inicio = std::chrono::steady_clock::now();
     for (int i = 0; i < tamanhoDoVetor - 1; ++i) {
         int menorAtual = i;
         
@@ -28,10 +25,13 @@ void selectionSort(auto vetor[], int tamanhoDoVetor){
         vetor[i] = vetor[menorAtual];
         vetor[menorAtual] = helper;
     }
+    std::chrono::duration<double> tempoTotal = std::chrono::duration<double,std::nano>(std::chrono::steady_clock::now() - inicio);
+    std::cout<<"Tempo de processamento :"<< tempoTotal.count() <<" microsegundos\n";
 }
 
-void bubbleSort(auto vetor[], int tamanhoDoVetor){
+void bubbleSort(int vetor[], int tamanhoDoVetor){
     int helper;
+    std::chrono::time_point<std::chrono::steady_clock> inicio = std::chrono::steady_clock::now();
     for (int i = 0; i < tamanhoDoVetor - 1; ++i) {
         for (int j = 0; j < tamanhoDoVetor - 1 -i; ++j) {
             if (vetor[j] > vetor[j + 1]) {
@@ -41,12 +41,18 @@ void bubbleSort(auto vetor[], int tamanhoDoVetor){
             }
         }
     }
+    std::chrono::duration<double> tempoTotal = std::chrono::duration<double,std::nano>(std::chrono::steady_clock::now() - inicio);
+    std::cout<<"Tempo de processamento :"<< tempoTotal.count() <<" microsegundos\n";
 }
 
-void compararTempoDeExecucao(auto vetor[], int tamanhoDoVetor){
-    chrono::steady_clock inicio = chrono::now();
+void compararTempoDeExecucao(int vetor[], int tamanhoDoVetor){
+    int outroVetor[10];
+    for(int i = 0; i < tamanhoDoVetor; i++){
+        outroVetor[i] = vetor[i];
+    }
     std::thread selection(selectionSort,vetor,tamanhoDoVetor);
     selection.detach();
-    std::thread bubble(bubbleSort,vetor,tamanhoDoVetor);
+    std::thread bubble(bubbleSort,outroVetor,tamanhoDoVetor);
     bubble.detach();
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 }
