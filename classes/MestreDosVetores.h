@@ -12,6 +12,8 @@
 
     void bubbleSort(int vetor[], int tamanhoDoVetor);
 
+    void insertionSort(int vetor[], int tamanhoDoVetor);
+
     void compararTempoDeExecucao(int vetor[], int tamanhoDoVetor);
     
 

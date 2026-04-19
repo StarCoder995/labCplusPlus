@@ -13,7 +13,7 @@ void mostrarVetor(int vetor[], int tamanhoDoVetor,std::string tipoDeOrnenacao ){
 
 void selectionSort(int vetor[], int tamanhoDoVetor){
     int helper;
-    std::chrono::time_point<std::chrono::steady_clock> inicio = std::chrono::steady_clock::now();
+    std::chrono::time_point<std::chrono::steady_clock> inicioSelection = std::chrono::steady_clock::now();
     for (int i = 0; i < tamanhoDoVetor - 1; ++i) {
         int menorAtual = i;
         
@@ -26,16 +26,15 @@ void selectionSort(int vetor[], int tamanhoDoVetor){
         vetor[i] = vetor[menorAtual];
         vetor[menorAtual] = helper;
     }
-    std::chrono::duration<long double> tempoTotal = std::chrono::duration<long double,std::nano>(std::chrono::steady_clock::now() - inicio);
+    std::chrono::duration<long double,std::micro> tempoTotalSelection = std::chrono::duration<long double,std::micro>(std::chrono::steady_clock::now() - inicioSelection);
     std::cout<<std::fixed;
-    std::cout<<"Tempo de processamento | Selection Sort :"<<std::setprecision(20)<< tempoTotal.count() <<" segundos\n";
-    mostrarVetor(vetor,10,"Selection Sort");
+    std::cout<<"Tempo de processamento | Selection Sort :"<<std::setprecision(10)<< tempoTotalSelection.count() <<" microsegundos\n";
 
 }
 
 void bubbleSort(int vetor[], int tamanhoDoVetor){
     int helper;
-    std::chrono::time_point<std::chrono::steady_clock> inicio = std::chrono::steady_clock::now();
+    std::chrono::time_point<std::chrono::steady_clock> inicioBubble = std::chrono::steady_clock::now();
     for (int i = 0; i < tamanhoDoVetor - 1; ++i) {
         for (int j = 0; j < tamanhoDoVetor - 1 -i; ++j) {
             if (vetor[j] > vetor[j + 1]) {
@@ -45,20 +44,39 @@ void bubbleSort(int vetor[], int tamanhoDoVetor){
             }
         }
     }
-    std::chrono::duration<long double> tempoTotal = std::chrono::duration<long double,std::nano>(std::chrono::steady_clock::now() - inicio);
+    std::chrono::duration<long double,std::micro> tempoTotalBubble = std::chrono::duration<long double,std::micro>(std::chrono::steady_clock::now() - inicioBubble);
     std::cout<<std::fixed;
-    std::cout<<"Tempo de processamento | BubbleSort :"<<std::setprecision(20)<< tempoTotal.count() <<" segundos\n";
-    mostrarVetor(vetor,10,"Bubble Sort");
+    std::cout<<"Tempo de processamento | BubbleSort :"<<std::setprecision(10)<< tempoTotalBubble.count() <<" microsegundos\n";
+}
+
+void insertionSort(int vetor[], int tamanhoDoVetor){
+    int helper;
+    std::chrono::time_point<std::chrono::steady_clock> inicioInsertion = std::chrono::steady_clock::now();
+    for (int i = 1; i < tamanhoDoVetor; ++i) {
+        helper = vetor[i];
+        int j = i - 1;
+        while (j >= 0 && vetor[j] > helper) {
+            vetor[j + 1] = vetor[j];
+            --j;
+        }
+        vetor[j + 1] = helper;
+    }
+    std::chrono::duration<long double,std::micro> tempoTotalInsertion = std::chrono::duration<long double,std::micro>(std::chrono::steady_clock::now() - inicioInsertion);
+    std::cout<<std::fixed;
+    std::cout<<"Tempo de processamento | Insertion Sort :"<<std::setprecision(10)<< tempoTotalInsertion.count() <<" microsegundos\n";
 }
 
 void compararTempoDeExecucao(int vetor[], int tamanhoDoVetor){
-    int outroVetor[100000];
+    int vetorBubble[200], vetorInsertion[200];
     for(int i = 0; i < tamanhoDoVetor; i++){
-        outroVetor[i] = vetor[i];
+        vetorBubble[i] = vetor[i];
+        vetorInsertion[i] = vetor[i];
     }
     std::thread selection(selectionSort,vetor,tamanhoDoVetor);
-    selection.detach();
-    std::thread bubble(bubbleSort,outroVetor,tamanhoDoVetor);
-    bubble.detach();
-    std::this_thread::sleep_for(std::chrono::seconds(30));
+    selection.join();
+    std::thread bubble(bubbleSort,vetorBubble,tamanhoDoVetor);
+    bubble.join();
+    std::thread insertion(insertionSort,vetorInsertion,tamanhoDoVetor);
+    insertion.join();
+    std::this_thread::sleep_for(std::chrono::seconds(10));
 }
