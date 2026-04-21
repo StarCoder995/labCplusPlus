@@ -67,7 +67,7 @@ void insertionSort(int vetor[], int tamanhoDoVetor){
 }
 
 void compararTempoDeExecucao(int vetor[], int tamanhoDoVetor){
-    int vetorBubble[200], vetorInsertion[200];
+    int vetorBubble[100000], vetorInsertion[100000];
     for(int i = 0; i < tamanhoDoVetor; i++){
         vetorBubble[i] = vetor[i];
         vetorInsertion[i] = vetor[i];
