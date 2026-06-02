@@ -2,8 +2,33 @@
 #include<string.h>
 #include<unistd.h>
 #include<sys/types.h>
+#include<sys/wait.h>
 
 #define MAX_LINE 80
+#define HISTORY_SIZE 10
+
+char history[HISTORY_SIZE][MAX_LINE];
+int history_count = 0;
+
+void add_history(char command){
+    int index = history_count & HISTORY_SIZE;
+    strcpy(history[index],command);
+    history_count++;
+}
+
+void show_history(){
+    int start, i, index;
+
+    if(history_count < HISTORY_SIZE){
+        start = 1;
+    } else{
+        start = history_count - HISTORY_SIZE + 1;
+    }
+    for(i = history_count;i>= start;i--){
+        index = (i - 1) % HISTORY_SIZE;
+        printf("%d %s\n",i,history[index]);
+    }
+}
 
 int parse_command(char input[], char *args[]){
     int i = 0, background = 0;
@@ -25,11 +50,30 @@ int parse_command(char input[], char *args[]){
     return background;
 }
 
-int main(){
+void execute_command(char *args[], int background){
+    pid_t pid;
+    pid = fork();
+
+    if(pid < 0){
+        printf("Erro ao criar processo filho\n");
+    }
+    else if(pid == 0){
+        execvp(args[0],args);
+        printf("Erro ao executar comando\n");
+    }
+    else{
+        if(background){
+            wait(NULL);
+        }
+    }
+}
+
+int main(void){
     char input[MAX_LINE];
     int should_run = 1;
 
     while(should_run){
+        printf("osh>");
         fflush(stdout);
         fgets(input, MAX_LINE,stdin);
         input[strcspn(input,"\n")] = '\0';
@@ -40,7 +84,7 @@ int main(){
         int background = parse_command(input,args);
         
         if(args[0] != NULL){
-            printf("comando principal: %s\n",args[0]);
+            execute_command(args,background);
         }
     }
     return 0;
