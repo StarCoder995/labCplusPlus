@@ -41,12 +41,11 @@ class Arvore{
                     navegador = navegador->direita;
             }
             navegador = novoNode;
-          
         }
 
         void imprimir(Node<T> navegador){
             if(navegador!= nullptr){
-                std::cout<< navegador->valor;
+                std::cout<< navegador->valor <<" ";
                 imprimir(navegador->esquerda);
                 imprimir(navegador->direita);
             } 
